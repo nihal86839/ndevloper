@@ -1,0 +1,195 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Role {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique // 'ADMIN', 'USER', 'MODERATOR'
+  permissions String[]
+  users       User[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model User {
+  id             String    @id @default(uuid())
+  email          String    @unique
+  username       String    @unique
+  passwordHash   String
+  isEmailVerified Boolean  @default(false)
+  roleId         Int
+  role           Role      @relation(fields: [roleId], references: [id])
+  avatar         String?
+  bio            String?
+  xp             Int       @default(0)
+  level          Int       @default(1)
+  settings       Settings?
+  purchases      Purchase[]
+  reportsMade    Report[]  @relation("Reporter")
+  reportsReceived Report[] @relation("Reported")
+  tickets        SupportTicket[]
+  messages       ChatMessage[]
+  auditLogs      AuditLog[]
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+model Settings {
+  id            String  @id @default(uuid())
+  userId        String  @unique
+  user          User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  theme         String  @default("gamer")
+  language      String  @default("en")
+  hideProfile   Boolean @default(false)
+  dmPreferences String  @default("all")
+}
+
+model Game {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  apkUrl      String
+  imageUrl    String
+  price       Float    @default(0)
+  isFree      Boolean  @default(true)
+  category    String
+  downloads   Int      @default(0)
+  purchases   Purchase[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model HackingTool {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  fileUrl     String?
+  externalLink String?
+  imageUrl    String
+  price       Float    @default(0)
+  isFree      Boolean  @default(true)
+  purchases   Purchase[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Video {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  videoUrl    String?
+  videoLink   String?
+  thumbnail   String
+  price       Float    @default(0)
+  isFree      Boolean  @default(true)
+  purchases   Purchase[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Photo {
+  id          String   @id @default(uuid())
+  title       String
+  imageUrl    String
+  category    String
+  downloads   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Song {
+  id          String   @id @default(uuid())
+  title       String
+  audioUrl    String
+  thumbnail   String
+  downloads   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Purchase {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+  itemId        String
+  itemType      String   // 'GAME', 'TOOL', 'VIDEO'
+  amount        Float
+  paymentProof  String
+  utrNumber     String
+  status        String   @default("PENDING") // 'PENDING', 'APPROVED', 'REJECTED'
+  game          Game?    @relation(fields: [gameId], references: [id])
+  gameId        String?
+  tool          HackingTool? @relation(fields: [toolId], references: [id])
+  toolId        String?
+  video         Video?   @relation(fields: [videoId], references: [id])
+  videoId       String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Donation {
+  id            String   @id @default(uuid())
+  donorName     String?
+  amount        Float
+  paymentProof  String
+  utrNumber     String
+  status        String   @default("PENDING")
+  createdAt     DateTime @default(now())
+}
+
+model Report {
+  id            String   @id @default(uuid())
+  reporterId    String
+  reporter      User     @relation("Reporter", fields: [reporterId], references: [id])
+  reportedId    String
+  reported      User     @relation("Reported", fields: [reportedId], references: [id])
+  reason        String
+  description   String
+  status        String   @default("PENDING")
+  createdAt     DateTime @default(now())
+}
+
+model SupportTicket {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+  subject       String
+  message       String
+  status        String   @default("OPEN")
+  replies       TicketReply[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model TicketReply {
+  id            String   @id @default(uuid())
+  ticketId      String
+  ticket        SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  senderId      String
+  message       String
+  createdAt     DateTime @default(now())
+}
+
+model ChatMessage {
+  id            String   @id @default(uuid())
+  senderId      String
+  sender        User     @relation(fields: [senderId], references: [id])
+  roomId        String   @default("GLOBAL")
+  content       String
+  isDeleted     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+}
+
+model AuditLog {
+  id            String   @id @default(uuid())
+  adminId       String
+  admin         User     @relation(fields: [adminId], references: [id])
+  action        String
+  details       String
+  createdAt     DateTime @default(now())
+}

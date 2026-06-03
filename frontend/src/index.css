@@ -1,0 +1,120 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* 3. Light Theme (Default fallback) */
+    --color-bg: #f8fafc;
+    --color-text: #0f172a;
+    --color-primary: #3b82f6;
+    --color-secondary: #64748b;
+    --color-accent: #f59e0b;
+    --color-panel: #ffffff;
+  }
+
+  .theme-dark {
+    /* 4. Dark Theme */
+    --color-bg: #0f172a;
+    --color-text: #f8fafc;
+    --color-primary: #3b82f6;
+    --color-secondary: #94a3b8;
+    --color-accent: #f59e0b;
+    --color-panel: #1e293b;
+  }
+
+  .theme-gamer {
+    /* 1. Gamer Theme */
+    --color-bg: #09090b;
+    --color-text: #f4f4f5;
+    --color-primary: #a855f7; /* Neon Purple */
+    --color-secondary: #2dd4bf; /* Cyan */
+    --color-accent: #ec4899; /* Pink */
+    --color-panel: #18181b;
+  }
+
+  .theme-hacker {
+    /* 2. Hacker Theme */
+    --color-bg: #000000;
+    --color-text: #22c55e; /* Matrix Green */
+    --color-primary: #16a34a;
+    --color-secondary: #14532d;
+    --color-accent: #4ade80;
+    --color-panel: #052e16;
+  }
+
+  .theme-cartoon {
+    /* 5. Cartoon Theme */
+    --color-bg: #fde047; /* Bright Yellow bg */
+    --color-text: #1e1b4b;
+    --color-primary: #ef4444; /* Bright Red */
+    --color-secondary: #3b82f6; /* Bright Blue */
+    --color-accent: #f97316;
+    --color-panel: #ffffff;
+  }
+
+  .theme-cartoon * {
+    /* Add a subtle cartoonish feel globally when this theme is active */
+    border-color: #1e1b4b;
+  }
+  
+  .theme-cartoon .bg-panel {
+    border-width: 3px;
+    border-radius: 1.5rem;
+    box-shadow: 6px 6px 0px rgba(30, 27, 75, 1); /* Hard cartoon shadow */
+  }
+
+  .theme-vegetable {
+    /* 6. Vegetable Theme */
+    --color-bg: #ecfdf5;
+    --color-text: #064e3b;
+    --color-primary: #10b981;
+    --color-secondary: #84cc16; /* Lime */
+    --color-accent: #f59e0b; /* Carrot */
+    --color-panel: #d1fae5;
+  }
+
+  .theme-dreamhouse {
+    /* 7. Dream House Theme */
+    --color-bg: #fdf2f8; /* Pink bg */
+    --color-text: #831843;
+    --color-primary: #f472b6;
+    --color-secondary: #fb7185;
+    --color-accent: #fbbf24;
+    --color-panel: #ffffff;
+  }
+
+  .theme-luxury {
+    /* 8. Billion Dollar Luxury Theme */
+    --color-bg: #111827;
+    --color-text: #d1d5db;
+    --color-primary: #fbbf24; /* Gold */
+    --color-secondary: #9ca3af; /* Silver */
+    --color-accent: #f59e0b;
+    --color-panel: #1f2937;
+  }
+
+  .theme-universal {
+    /* 9. Universal Modern Theme */
+    --color-bg: #fafafa;
+    --color-text: #171717;
+    --color-primary: #2563eb;
+    --color-secondary: #4b5563;
+    --color-accent: #0ea5e9;
+    --color-panel: #ffffff;
+  }
+
+  .theme-cyberpunk {
+    /* 10. Cyberpunk Theme */
+    --color-bg: #fcd34d; /* Yellow */
+    --color-text: #000000;
+    --color-primary: #06b6d4; /* Cyan */
+    --color-secondary: #db2777; /* Pink */
+    --color-accent: #4ade80; /* Neon green */
+    --color-panel: #fef3c7;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans transition-colors duration-300;
+  }
+}
